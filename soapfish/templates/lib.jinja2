@@ -90,7 +90,7 @@ class {{ name|capitalize }}({{ restriction|type(known_types) }}):
 {# [blank line] #}
 {%- endmacro %}
 
-{% macro render_complexType(class_name, content, known_types=None) -%}
+{% macro render_complexType(class_name, content, known_types=None, schema=None, resolver=None, name_override=None) -%}
 {%- set ct = content %}
 {%- if not ct.sequence and not ct.complexContent %}
 class {{ class_name|capitalize }}(xsd.ComplexType):
@@ -102,7 +102,7 @@ class {{ ct.name|capitalize }}({{ ct.complexContent.restriction|type(known_types
     INHERITANCE = xsd.Inheritance.RESTRICTION
     {%- set content = ct.complexContent.restriction %}
     {%- else %}
-class {{ ct.name|capitalize }}({{ ct.complexContent.extension|type(known_types) }}):
+class {% if name_override is not none %}{{ name_override|capitalize }}{% else %}{{ ct.name|capitalize }}{% endif %}({{ ct.complexContent.extension|type(known_types) }}):
     INHERITANCE = xsd.Inheritance.EXTENSION
     {%- set content = ct.complexContent.extension %}
     {%- endif %}

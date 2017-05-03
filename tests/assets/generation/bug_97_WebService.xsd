@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="https://www.example.com/ws"
+           targetNamespace="https://www.example.com/ws"
+           xmlns:bar="https://www.example.com/pdm"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified"
+           version="1.00">
+
+    <xs:import namespace="https://www.example.com/pdm" schemaLocation="bug_97_DataModel.xsd" />
+
+    <!-- ================================================== -->
+    <!-- ===== Elements -->
+    <!-- ================================================== -->
+
+    <!-- Foo Create -->
+    <xs:element name="fooCreateRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="FooCreateRequestType"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fooCreateResponse" >
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="FooResponseType"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="errorResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="ErrorResponseType"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ================================================== -->
+    <!-- ===== Complex Types -->
+    <!-- ================================================== -->
+
+    <!-- Foo Create -->
+    <xs:complexType name="FooCreateRequestType">
+        <xs:annotation>
+            <xs:documentation>Foo Details to be created.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FooCreateRequestBaseType">
+                <xs:attribute name="version" type="xs:decimal" default="1.00" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="FooCreateRequestBaseType">
+        <xs:annotation>
+            <xs:documentation>Foo Details to be created.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="businessData" type="FooCreateRequestBusinessDataType" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FooCreateRequestBusinessDataType">
+        <xs:sequence>
+            <xs:annotation>
+                <xs:documentation>Foo Details to be created.</xs:documentation>
+            </xs:annotation>
+            <xs:element name="foo" type="bar:FooCreateType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Foo Response -->
+    <xs:complexType name="FooResponseType">
+        <xs:complexContent>
+            <xs:extension base="FooResponseBaseType">
+                <xs:attribute name="version" type="xs:decimal" default="1.00"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="FooResponseBaseType">
+        <xs:sequence>
+            <xs:element name="businessData" type="FooResponseBusinessDataType" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Error -->
+    <xs:complexType name="ErrorResponseType">
+        <xs:complexContent>
+            <xs:extension base="ErrorResponseBaseType">
+                <xs:attribute name="version" type="xs:decimal" default="1.00" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ErrorResponseBaseType">
+        <xs:sequence>
+            <xs:element name="errorData" type="ErrorType" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ErrorType">
+        <xs:sequence>
+            <xs:element name="code" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>A value representing the error code.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="foo" type="bar:FooIdentifierType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The Foo details, if possible.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Common Types -->
+    <xs:complexType name="FooResponseBusinessDataType">
+        <xs:all>
+            <xs:annotation>
+                <xs:documentation>Response details</xs:documentation>
+            </xs:annotation>
+            <xs:element name="foo" type="bar:FooIdentifierType" />
+            <xs:element name="notes" type="xs:string" minOccurs="0" />
+        </xs:all>
+    </xs:complexType>
+
+</xs:schema>

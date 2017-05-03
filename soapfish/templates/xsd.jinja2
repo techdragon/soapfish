@@ -38,12 +38,16 @@ from soapfish import xsd
 {%- endfor %}
 {#- Complex Types -#}
 {% for ct in schema.complexTypes -%}
-{{ lib.render_complexType(ct.name, ct, known_types) }}
+{{ lib.render_complexType(ct.name, ct, known_types, schema, resolver) }}
 {%- do known_types.append(ct.name|capitalize) -%}
 {%- endfor %}
 {#- Complex Types (Defined in Elements) -#}
 {% for element in schema.elements if element.complexType -%}
-{{ lib.render_complexType(element.name, element.complexType, known_types) }}
+{%- if element.complexType.name is none and element.name is not none -%}
+{{ lib.render_complexType(element.name, element.complexType, known_types, schema, resolver, name_override=element.name) }}
+{%- else -%}
+{{ lib.render_complexType(element.name, element.complexType, known_types, schema, resolver) }}
+{%- endif -%}
 {%- endfor %}
 {{ lib.render_Schema(schema, location, known_types) }}
 {#- vim:set et ft=django nowrap sts=4 sw=4 ts=4: -#}

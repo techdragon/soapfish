@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="ExampleWebService" targetNamespace="https://www.example.com/wsdl" xmlns:barws="https://www.example.com/ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:baz="https://www.example.com/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="https://www.example.com/wsdl" xmlns:barws="https://www.example.com/ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:baz="https://www.example.com/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:import namespace="https://www.example.com/ws" schemaLocation="bug_97_WebService.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="fooCreateRequest"><wsdl:part element="barws:fooCreateRequest" name="parameters"/></wsdl:message>
+  <wsdl:message name="fooCreateResponse"><wsdl:part element="barws:fooCreateResponse" name="parameters"/></wsdl:message>
+  <wsdl:message name="fooServiceException"><wsdl:part element="barws:errorResponse" name="error"/></wsdl:message>
+  <wsdl:portType name="FooService">
+    <wsdl:operation name="FooCreate">
+      <wsdl:input message="baz:fooCreateRequest"/>
+      <wsdl:output message="baz:fooCreateResponse"/>
+      <wsdl:fault message="baz:fooServiceException" name="fooServiceException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FooServiceSoapBinding" type="baz:FooService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="FooCreate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+      <wsdl:fault name="fooServiceException"><soap:fault name="fooServiceException" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FooServiceBinding" type="baz:FooService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="FooCreate">
+      <soap:operation soapAction=""/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+      <wsdl:fault name="fooServiceException"><soap:fault name="fooServiceException" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FooServiceService">
+    <wsdl:port binding="baz:FooServiceSoapBinding" name="FooServicePort">
+      <soap:address location="http://api.example.com/ws/v1/foo"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

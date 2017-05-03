@@ -46,6 +46,13 @@ class WSDLCodeGenerationTest(PythonicTestCase):
         assert_equals(['A'], list(schemas[0].elements))
         assert_equals(['B'], list(schemas[1].elements))
 
+    def test_can_generate_code_for_bug_97_wsdl(self):
+        path = 'tests/assets/generation/bug_97.wsdl'
+        xml = utils.open_document(path)
+        code = wsdl2py.generate_code_from_wsdl(xml, 'client', cwd=os.path.dirname(path))
+        schemas, symbols = generated_symbols(code)
+        assert_is_not_empty(schemas)
+
     @unittest.skip('Cannot generate code for wsdl with type inheritance')
     def test_can_generate_code_for_inheritance(self):
         xml = utils.open_document('tests/assets/generation/inheritance.wsdl')
